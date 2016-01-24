@@ -12,13 +12,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
-public abstract class BaiduNewsSpider {
+public class BaiduNewsSpider implements Runnable{
 	//HaspMap存储标题和链接
 	private static HashMap<String, String> hm = new HashMap<String, String>();
 	//爬取关键字
 	private static String keyword = "";
 	//实际爬取链接
 	private static String realUrl = "http://news.baidu.com/ns?";
+	//数据存储位置
+	private static String filepath = "";
 	//默认时间顺序爬取
 	private static final int sortByTime = 0;
 	//默认爬取数量	
@@ -29,10 +31,29 @@ public abstract class BaiduNewsSpider {
 	/*
 	 * @param keyword
 	 * @param filename
+	 * @Authro: Piccus
+	 * @Description: 实例化BaiduNewsSpider
+	 */
+	public BaiduNewsSpider(String key, String filename){
+		keyword = key;
+		filepath = filename;
+	}
+	
+	/*
+	 * @Author: Piccus
+	 * @Description: 线程开始
+	 */
+	public void run(){
+		initSpider(keyword, filepath);
+	}
+	
+	/*
+	 * @param keyword
+	 * @param filename
 	 * @Author: Piccus
 	 * @Description: 初始化爬虫并开始爬取 
 	 */
-	public static void initSpider(String key, String filename){
+	private static void initSpider(String key, String filename){
 		keyword = key;
 		realUrl = realUrl + "word=" + keyword + "&tn=news&from=news&rn=" + listMax + "ct=" + sortByTime;
 		try {
@@ -85,17 +106,19 @@ public abstract class BaiduNewsSpider {
 	 * @Author: Piccus
 	 * @Description: 设置爬取数量
 	 */
-	public static void setListMax(int listMax){
+	public void setListMax(int listMax){
 		BaiduNewsSpider.listMax = listMax;
 	}
 	
 	/*
 	 * @Author: Piccus
-	 * @Desciption: BaiduNewsSpider usage Demo
+	 * @Desciption: BaiduNewsSpider thread usage Demo
 	 */
 	public static void main(String args[]) throws IOException{
-		BaiduNewsSpider.setListMax(20);
-		BaiduNewsSpider.initSpider("股市", "股市.txt");
+		BaiduNewsSpider spider = new BaiduNewsSpider("股票", "股票.txt");
+		spider.setListMax(30);
+		Thread thread = new Thread(spider);
+		thread.start();
 	}
 	
 }
