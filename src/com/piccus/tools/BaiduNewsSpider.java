@@ -115,7 +115,7 @@ public class BaiduNewsSpider implements Runnable{
 	 * @Desciption: BaiduNewsSpider thread usage Demo
 	 */
 	public static void main(String args[]) throws IOException{
-		BaiduNewsSpider spider = new BaiduNewsSpider("¹ÉÆ±", "¹ÉÆ±.txt");
+		BaiduNewsSpider spider = new BaiduNewsSpider("¹ÉÆ±", "demo.txt");
 		spider.setListMax(30);
 		Thread thread = new Thread(spider);
 		thread.start();
