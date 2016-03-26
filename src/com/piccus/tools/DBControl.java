@@ -42,4 +42,12 @@ public abstract class DBControl {
 		}
 	}
 	
+	/*
+	 * @param databasename
+	 * @Author: Piccus
+	 * @Description: 更改存储数据库
+	 */
+	public void changeDBName(String databasename){
+		DBControl.dbname = "jdbc:sqlite:" + databasename;
+	}
 }

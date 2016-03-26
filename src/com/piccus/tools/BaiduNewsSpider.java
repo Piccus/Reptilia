@@ -1,10 +1,9 @@
 package com.piccus.tools;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map.Entry;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
