@@ -23,7 +23,7 @@ public abstract class DBControl {
 	
 	private static final int Netease = 1;
 	
-	private static final int Tencent = 2;
+	private static final int Sohu = 2;
 	
 	/*
 	 * @param: HashMap
@@ -77,8 +77,8 @@ public abstract class DBControl {
 				newsType = "Sina";
 			if(type == Netease)
 				newsType = "Netease";
-			if(type == Tencent)
-				newsType = "Tencent";
+			if(type == Sohu)
+				newsType = "Sohu";
 			for(Entry<String, String> entry : hm.entrySet()){
 				String insertData = "INSERT INTO HeadlineNews VALUES('" + entry.getKey() + "', '" + entry.getValue() + "', '" + newsType + "');";
 				stat.executeUpdate(insertData);
