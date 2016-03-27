@@ -24,15 +24,15 @@ public class BaiduNewsThread implements Runnable {
 	 */
 	@Override
 	public void run() {
-		initBaiduNewsThreadThread();
+		initBaiduNewsThread();
 	}
 
 	/*
 	 * @Author: Piccus
 	 * @Description: 初始化BaiduNewsSpider并调用DBControl保存到SQlite
 	 */
-	private void initBaiduNewsThreadThread() {
+	private void initBaiduNewsThread() {
 		BaiduNewsSpider.initSpider(keyword);
-		DBControl.Save(BaiduNewsSpider.getData());
+		DBControl.saveBaiduNews(BaiduNewsSpider.getData());
 	}	
 }

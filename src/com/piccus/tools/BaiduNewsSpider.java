@@ -24,17 +24,7 @@ public abstract class BaiduNewsSpider{
 	private static int listMax = 20;
 	//ÅÀ³æUserAgent
 	private static final String agent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.231.154 Safari/537.36 LBBROWSER";
-	
-	/*
-	 * @param keyword
-	 * @param filename
-	 * @Authro: Piccus
-	 * @Description: ÊµÀý»¯BaiduNewsSpider
-	 */
-	public BaiduNewsSpider(String key, String filename){
-		keyword = key;
-	}
-	
+		
 	/*
 	 * @param keyword
 	 * @param filename
