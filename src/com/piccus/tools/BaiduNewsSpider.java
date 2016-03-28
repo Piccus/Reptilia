@@ -56,13 +56,13 @@ public abstract class BaiduNewsSpider{
 	 */
 	private static void getHashData(String url) throws IOException{
 		Document doc = Jsoup.connect(url).userAgent(agent).get();
-		Element content = doc.getElementById("content_left");
-		Elements links = content.getElementsByClass("c-title");
+		Elements links = doc.getElementsByClass("result");
 		for(Element link : links){
-			Elements linka = link.select("a");
+			Element linka = link.getElementsByClass("c-title").first();
 			String linkHref = linka.attr("href");
 			String linkText = linka.text();
-			hm.put(linkText, linkHref);
+			Element linksource = link.getElementsByClass("c-author").first();
+			hm.put(linkText + " " + linksource.text(), linkHref);
 		}	
 	}
 	
@@ -71,7 +71,7 @@ public abstract class BaiduNewsSpider{
 	 * @Author: Piccus
 	 * @Description: 设置爬取数量
 	 */
-	public void setListMax(int listMax){
+	public static void setListMax(int listMax){
 		BaiduNewsSpider.listMax = listMax;
 	}
 }
