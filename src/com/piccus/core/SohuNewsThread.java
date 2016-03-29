@@ -3,16 +3,26 @@ package com.piccus.core;
 import com.piccus.tools.DBControl;
 import com.piccus.tools.SohuNewsSpider;
 
-public class SohuNewsThread implements Runnable{
+public class SohuNewsThread {
 	//新闻来源类型
 	private static final int Sohu = 2;
+	//数据库名称
+	private String dbName = "";
+	
+	/*
+	 * @param dbname
+	 * @Author: Piccus
+	 * @Description: 实例化本类
+	 */
+	public SohuNewsThread(String dbName){
+		this.dbName = dbName;
+	}
 	
 	/*
 	 * @Author: Piccus
 	 * @Description: 开始线程
 	 */
-	@Override
-	public void run() {
+	public void start() {
 		initSinaNewsThread();
 	}
 	
@@ -22,6 +32,7 @@ public class SohuNewsThread implements Runnable{
 	 */
 	private void initSinaNewsThread() {
 		SohuNewsSpider.initSpider();
+		DBControl.changeDBName(dbName);
 		DBControl.saveHeadlineNews(SohuNewsSpider.getData(), Sohu);
 	}
 }

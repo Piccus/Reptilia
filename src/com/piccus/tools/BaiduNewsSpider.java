@@ -58,7 +58,7 @@ public abstract class BaiduNewsSpider{
 		Document doc = Jsoup.connect(url).userAgent(agent).get();
 		Elements links = doc.getElementsByClass("result");
 		for(Element link : links){
-			Element linka = link.getElementsByClass("c-title").first();
+			Element linka = link.getElementsByClass("c-title").first().select("a").first();
 			String linkHref = linka.attr("href");
 			String linkText = linka.text();
 			Element linksource = link.getElementsByClass("c-author").first();

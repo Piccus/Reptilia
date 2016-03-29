@@ -83,6 +83,7 @@ public abstract class DBControl {
 				String insertData = "INSERT INTO HeadlineNews VALUES('" + entry.getKey() + "', '" + entry.getValue() + "', '" + newsType + "');";
 				stat.executeUpdate(insertData);
 			}
+			stat.close();
 			conn.close();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -94,7 +95,7 @@ public abstract class DBControl {
 	 * @Author: Piccus
 	 * @Description: 更改存储数据库
 	 */
-	public void changeDBName(String databasename){
-		DBControl.dbname = "jdbc:sqlite:" + databasename;
+	public static void changeDBName(String databasename){
+		DBControl.dbname = "jdbc:sqlite:" + databasename + ".db";
 	}
 }
