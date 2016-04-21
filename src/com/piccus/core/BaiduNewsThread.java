@@ -3,34 +3,23 @@ package com.piccus.core;
 import com.piccus.tools.BaiduNewsSpider;
 import com.piccus.tools.DBControl;
 
-public class BaiduNewsThread {
+public class BaiduNewsThread implements Runnable{
 	
 	//爬取关键字
 	private String keyword = "";
 	//爬取数量
 	private int listMax = 20; 
 	//数据库名称
-	private String dbName = "";
+	private String dbName = "baidunews";
 	
 	/*
-	 * @param keyword listMax dbname
+	 * @param keyword listMax
 	 * @Author: Piccus
 	 * @Description: 实例化本类
 	 */
-	
-	public BaiduNewsThread(String keyword,int listMax, String dbName){
+	public BaiduNewsThread(String keyword,int listMax){
 		this.keyword = keyword;
 		this.listMax = listMax;
-		this.dbName = dbName;
-	}
-	
-	/*
-	 * @Author: Piccus
-	 * @Description: 开始
-	 */
-
-	public void start() {
-		initBaiduNewsThread();
 	}
 
 	/*
@@ -42,5 +31,14 @@ public class BaiduNewsThread {
 		BaiduNewsSpider.initSpider(keyword);
 		DBControl.changeDBName(dbName);
 		DBControl.saveBaiduNews(BaiduNewsSpider.getData());
+	}
+
+	/*
+	 * @Author: Piccus
+	 * @Description: 开始线程
+	 */
+	@Override
+	public void run() {
+		initBaiduNewsThread();
 	}
 }

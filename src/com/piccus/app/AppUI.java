@@ -22,14 +22,10 @@ import java.awt.event.ItemListener;
 import javax.swing.border.TitledBorder;
 
 import com.piccus.core.BaiduNewsThread;
-import com.piccus.core.NeteaseNewsThread;
-import com.piccus.core.SinaNewsThread;
-import com.piccus.core.SohuNewsThread;
+import com.piccus.core.HeadlineNewsThread;
 
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.EtchedBorder;
+
+
 
 public class AppUI {
 	//Ö÷´°¿Úframe
@@ -326,18 +322,9 @@ public class AppUI {
 	private class HeadlineButtonHandle implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(sinaThreadMark == 1){
-				SinaNewsThread sinaNewsThread = new SinaNewsThread(dbName);
-				sinaNewsThread.start();
-			}
-			if(neteaseThreadMark == 1){
-				NeteaseNewsThread neteaseNewsThread = new NeteaseNewsThread(dbName);
-				neteaseNewsThread.start();
-			}
-			if(sohuThreadMark == 1){
-				SohuNewsThread sohuNewsThread = new SohuNewsThread(dbName);
-				sohuNewsThread.start();
-			}
+			HeadlineNewsThread headlineNewsThread = new HeadlineNewsThread(sinaThreadMark, neteaseThreadMark, sohuThreadMark, dbName);
+			Thread thread = new Thread(headlineNewsThread);
+			thread.start();
 		}
 	}
 	
@@ -398,8 +385,9 @@ public class AppUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			BaiduNewsThread baiduNewsThread = new BaiduNewsThread(searchTextField.getText(), baiduNewsNumber, dbName);
-			baiduNewsThread.start();
+			BaiduNewsThread baiduNewsThread = new BaiduNewsThread(searchTextField.getText(), baiduNewsNumber);
+			Thread thread = new Thread(baiduNewsThread);
+			thread.start();
 		}
 		
 	}

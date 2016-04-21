@@ -41,7 +41,7 @@ public abstract class NeteaseNewsSpider {
 	 */
 	private static void getHashData() throws IOException{
 		Document doc = Jsoup.connect(url).userAgent(agent).get();
-		Elements content = doc.select("div.fn_three_cat");
+		Elements content = doc.getElementsByClass("topnews_list");
 		Elements links = content.select("a");
 		for(Element link : links){
 			hm.put(link.text(), link.attr("href"));
