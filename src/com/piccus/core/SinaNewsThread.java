@@ -6,16 +6,15 @@ import com.piccus.tools.SinaNewsSpider;
 public class SinaNewsThread{
 	//新闻来源类型
 	private static final int Sina = 0;
-	//数据库名称
-	private String dbName = "";
+
 	
 	/*
 	 * @param dbname
 	 * @Author: Piccus
 	 * @Description: 实例化本类
 	 */
-	public SinaNewsThread(String dbName){
-		this.dbName = dbName;
+	public SinaNewsThread(){
+
 	}
 	
 	/*
@@ -32,7 +31,7 @@ public class SinaNewsThread{
 	 */
 	private void initSinaNewsThread() {
 		SinaNewsSpider.initSpider();
-		DBControl.changeDBName(dbName);
+
 		DBControl.saveHeadlineNews(SinaNewsSpider.getData(), Sina);
 	}
 }

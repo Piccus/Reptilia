@@ -8,18 +8,16 @@ public class HeadlineNewsThread implements Runnable{
 	
 	private int sohuThreadMark = 0;
 	
-	private String dbName = "";
 	
 	/*
 	 * @param sinaThreadMark neteaseThreadMark sohuThreadMark dbName
 	 * @Author: Piccus
 	 * @Description: 实例化本类
 	 */
-	public HeadlineNewsThread(int sinaThreadMark, int neteaseThreadMark, int sohuThreadMark, String dbName){
+	public HeadlineNewsThread(int sinaThreadMark, int neteaseThreadMark, int sohuThreadMark){
 		this.sinaThreadMark = sinaThreadMark;
 		this.neteaseThreadMark = neteaseThreadMark;
 		this.sohuThreadMark = sohuThreadMark;
-		this.dbName = dbName;
 	}
 	
 	/*
@@ -36,16 +34,22 @@ public class HeadlineNewsThread implements Runnable{
 	 */
 	private void initHeadlineNewsThread() {
 		if(sinaThreadMark == 1){
-			SinaNewsThread sinaNewsThread = new SinaNewsThread(dbName);
+			SinaNewsThread sinaNewsThread = new SinaNewsThread();
 			sinaNewsThread.start();
 		}
 		if(neteaseThreadMark == 1){
-			NeteaseNewsThread neteaseNewsThread = new NeteaseNewsThread(dbName);
+			NeteaseNewsThread neteaseNewsThread = new NeteaseNewsThread();
 			neteaseNewsThread.start();
 		}
 		if(sohuThreadMark == 1){
-			SohuNewsThread sohuNewsThread = new SohuNewsThread(dbName);
+			SohuNewsThread sohuNewsThread = new SohuNewsThread();
 			sohuNewsThread.start();
 		}
+	}
+	
+	public static void main(String args[]){
+		HeadlineNewsThread headlineNewsThread = new HeadlineNewsThread(1, 1, 1);
+		Thread thread = new Thread(headlineNewsThread);
+		thread.start();
 	}
 }

@@ -4,18 +4,18 @@ import org.sqlite.JDBC;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 public abstract class DBControl {
 	//默认数据库名称
 	private static String dbname = "jdbc:sqlite:news.db";
-	//baidunews表存在判断SQL
-	private static String baidutableExistSql = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name='BaiduNews';";
-	//baidunews表创建SQL
-	private static String baidutableCreateSql = "CREATE TABLE BaiduNews(title varchar(50), url varchar(100));" ;
+	
 	//headlinenews表存在判断SQL
 	private static String headlinetableExistSql = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name='HeadlineNews';";
 	//headlinenews表创建SQL
-	private static String headlinetableCreateSql = "CREATE TABLE HeadlineNews(title varchar(50), url varchar(100), source varchar(20));";
+	private static String headlinetableCreateSql = "CREATE TABLE HeadlineNews(title varchar(100), url varchar(100), source varchar(20));";
+	
+	private static String headlineNewsExistSql = "select * from HeadlineNews where title='";
 	
 	private static String newsType = "";
 	
@@ -25,35 +25,11 @@ public abstract class DBControl {
 	
 	private static final int Sohu = 2;
 	
-	/*
-	 * @param: HashMap
-	 * @Author: Piccus
-	 * @Description: 存储baidunews到SQlite 
-	 */
-	public static void saveBaiduNews(HashMap<String, String> hm){
-		try
-		{
-			Class.forName("org.sqlite.JDBC");
-			
-			Connection conn = DriverManager.getConnection(dbname);
-			
-			Statement stat = conn.createStatement();
-			
-			ResultSet rs = stat.executeQuery(baidutableExistSql);
-			
-			if(rs.getString(1).equals("0"))
-				stat.executeUpdate(baidutableCreateSql);
-				
-			for(Entry<String, String> entry : hm.entrySet()){
-				String insertData = "INSERT INTO BaiduNews VALUES('" + entry.getKey() + "', '" + entry.getValue() + "');";
-				stat.executeUpdate(insertData);
-			}
-			conn.close();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
+	private static String getSinaSql = "select * from HeadlineNews where source = '新浪';";
 	
+	private static String getNeteaseSql = "select * from HeadlineNews where source = '网易';";
+	
+	private static String getSohuSql = "select * from HeadlineNews where source = '搜狐';";
 	/*
 	 * @param: HashMap, newstype
 	 * @Author: Piccus
@@ -72,17 +48,24 @@ public abstract class DBControl {
 			
 			if(rs.getString(1).equals("0"))
 				stat.executeUpdate(headlinetableCreateSql);
+
 			
 			if(type == Sina)
-				newsType = "Sina";
+				newsType = "新浪";
 			if(type == Netease)
-				newsType = "Netease";
+				newsType = "网易";
 			if(type == Sohu)
-				newsType = "Sohu";
+				newsType = "搜狐";
 			for(Entry<String, String> entry : hm.entrySet()){
-				String insertData = "INSERT INTO HeadlineNews VALUES('" + entry.getKey() + "', '" + entry.getValue() + "', '" + newsType + "');";
-				stat.executeUpdate(insertData);
+				String searchData = headlineNewsExistSql + entry.getKey() + "';" ;
+				rs = stat.executeQuery(searchData);
+				if(!(rs.next())){
+					String insertData = "INSERT INTO HeadlineNews VALUES('" + entry.getKey() + "', '" + entry.getValue() + "', '" + newsType + "');";
+					stat.executeUpdate(insertData);
+					
+				}
 			}
+			rs.close();
 			stat.close();
 			conn.close();
 		}catch(Exception e){
@@ -98,4 +81,38 @@ public abstract class DBControl {
 	public static void changeDBName(String databasename){
 		DBControl.dbname = "jdbc:sqlite:" + databasename + ".db";
 	}
+	
+	public static Vector searchNews(int sinaMark, int neteaseMark, int sohuMark){
+		Vector vector = new Vector();
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection conn = DriverManager.getConnection(dbname);
+			Statement stat = conn.createStatement();
+			if(sinaMark == 1){
+				ResultSet rs = stat.executeQuery(getSinaSql);
+				while(rs.next()){
+					vector.addElement(rs.getString("title") + "   " + rs.getString("url") + "   " + rs.getString("source"));
+				}
+			}
+			if(neteaseMark == 1){
+				ResultSet rs = stat.executeQuery(getNeteaseSql);
+				while(rs.next()){
+					vector.addElement(rs.getString("title") + "   " + rs.getString("url") + "   " + rs.getString("source"));
+				}
+			}
+			if(sohuMark == 1){
+				ResultSet rs = stat.executeQuery(getSohuSql);
+				while(rs.next()){
+					vector.addElement(rs.getString("title") + "   " + rs.getString("url") + "   " + rs.getString("source"));
+				}
+			}
+			stat.close();
+			conn.close();
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+			return vector;
+			}
 }

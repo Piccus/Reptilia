@@ -1,44 +1,49 @@
 package com.piccus.core;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Vector;
+
 import com.piccus.tools.BaiduNewsSpider;
 import com.piccus.tools.DBControl;
 
-public class BaiduNewsThread implements Runnable{
+public class BaiduNewsThread{
 	
 	//爬取关键字
 	private String keyword = "";
 	//爬取数量
 	private int listMax = 20; 
-	//数据库名称
-	private String dbName = "baidunews";
-	
+	//当前新闻页码
+	private int page = 0;
+	//新闻总数
+	private String allCount = "";
 	/*
 	 * @param keyword listMax
 	 * @Author: Piccus
 	 * @Description: 实例化本类
 	 */
-	public BaiduNewsThread(String keyword,int listMax){
+	public BaiduNewsThread(String keyword, int listMax, int page){
 		this.keyword = keyword;
 		this.listMax = listMax;
+		this.page = page;
 	}
 
-	/*
-	 * @Author: Piccus
-	 * @Description: 初始化BaiduNewsSpider并调用DBControl保存到SQlite
-	 */
-	private void initBaiduNewsThread() {
-		BaiduNewsSpider.setListMax(listMax);
-		BaiduNewsSpider.initSpider(keyword);
-		DBControl.changeDBName(dbName);
-		DBControl.saveBaiduNews(BaiduNewsSpider.getData());
+	public Vector getData(){
+		
+		Vector tm = new Vector();
+		BaiduNewsSpider sp = new BaiduNewsSpider();
+		sp.setListMax(listMax);
+		sp.setPage(page);
+		sp.initSpider(keyword);
+		allCount = sp.getAllCount();
+		HashMap<String, String> hm = sp.getData();
+		for(Entry<String, String> entry : hm.entrySet()){
+			tm.addElement(entry.getKey() + "   "+ entry.getValue());
+		}
+		return tm;
 	}
 
-	/*
-	 * @Author: Piccus
-	 * @Description: 开始线程
-	 */
-	@Override
-	public void run() {
-		initBaiduNewsThread();
+	public String getAllCount(){
+		return allCount;
 	}
 }
